@@ -1,10 +1,13 @@
 package hu.petrik.akasztofa
 
+import android.graphics.drawable.Drawable
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import java.util.ArrayList
 import kotlin.random.Random
 
@@ -21,9 +24,9 @@ class MainActivity : AppCompatActivity() {
 
     val szoArray = arrayOf("game", "cpu", "memory", "pear", "team", "android", "color", "speaker", "controller", "monitor", "phone", "cable")
     val abc : ArrayList<Char> = ArrayList()
-
-
     var i = 0
+    var hiba = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -36,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 textViewBetu.text = abc[i].toString()
             }
             else {
-                ++i
+                i++
                 textViewBetu.text = abc[i].toString()
             }
         }
@@ -47,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                 textViewBetu.text = abc[i].toString()
             }
             else {
-                --i
+                i--
                 textViewBetu.text = abc[i].toString()
             }
         }
@@ -69,7 +72,25 @@ class MainActivity : AppCompatActivity() {
                     textViewSzo.append(szoBetuk[k].toString())
                 }
             } else {
-
+                hiba++
+                when(hiba) {
+                    1 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa01)
+                    2 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa02)
+                    3 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa03)
+                    4 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa04)
+                    5 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa05)
+                    6 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa06)
+                    7 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa07)
+                    8 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa08)
+                    9 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa09)
+                    10 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa10)
+                    11 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa11)
+                    12 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa12)
+                    13 -> {
+                        imageViewAkasztofa.setImageResource(R.drawable.akasztofa13)
+                        gameEnd()
+                    }
+                }
             }
         }
     }
@@ -97,5 +118,32 @@ class MainActivity : AppCompatActivity() {
         /*for (j in szo.indices) {
             textViewSzo.append(szo[j].toString())
         }*/
+
+    }
+
+    fun gameEnd() {
+        var alert = AlertDialog.Builder(this)
+            .setTitle("Nem Sikerült kitalálni")
+            .setMessage("Szeretnél még egyet játszani?")
+            .setCancelable(false)
+            .setPositiveButton("Igen") { _, _ ->
+                reset()
+            }.setNegativeButton("Nem") { _, _ ->
+                finishAffinity()
+            }.show()
+    }
+
+    fun reset() {
+        textViewSzo.text = ""
+        textViewBetu.text = abc[0].toString()
+        szo = szoArray[random.nextInt(12)].toCharArray()
+        szoBetuk = CharArray(szo.size)
+        for (i in szo.indices) {
+            textViewSzo.append("_")
+            szoBetuk[i] = '_'
+        }
+        hiba = 0
+        i = 0
+        imageViewAkasztofa.setImageResource(R.drawable.akasztofa00)
     }
 }
