@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var random : Random
     lateinit var szo : CharArray
     lateinit var szoBetuk : CharArray
+    lateinit var gameEndDialog : AlertDialog.Builder
 
     val szoArray = arrayOf("game", "cpu", "memory", "pear", "team", "android", "color", "speaker", "controller", "monitor", "phone", "cable")
     val abc : ArrayList<Char> = ArrayList()
@@ -57,7 +58,11 @@ class MainActivity : AppCompatActivity() {
 
         buttonTipp.setOnClickListener() {
             val betu = textViewBetu.text.first().lowercaseChar()
-            if (szo.contains(betu)) {
+            if (szoBetuk.contentEquals(szo)) {
+                gameEndDialog.setTitle("Helyes megfejtés!")
+                gameEndDialog.show()
+            }
+            else if (szo.contains(betu)) {
                 textViewSzo.text = ""
                 var index : ArrayList<Int> = ArrayList()
                 for (i in szo.indices) {
@@ -88,7 +93,8 @@ class MainActivity : AppCompatActivity() {
                     12 -> imageViewAkasztofa.setImageResource(R.drawable.akasztofa12)
                     13 -> {
                         imageViewAkasztofa.setImageResource(R.drawable.akasztofa13)
-                        gameEnd()
+                        gameEndDialog.setTitle("Nem sikerült kitalálni!")
+                        gameEndDialog.show()
                     }
                 }
             }
@@ -115,22 +121,21 @@ class MainActivity : AppCompatActivity() {
             textViewSzo.append("_")
             szoBetuk[i] = '_'
         }
+        gameEnd()
         /*for (j in szo.indices) {
             textViewSzo.append(szo[j].toString())
         }*/
-
     }
 
     fun gameEnd() {
-        var alert = AlertDialog.Builder(this)
-            .setTitle("Nem Sikerült kitalálni")
+        gameEndDialog = AlertDialog.Builder(this)
             .setMessage("Szeretnél még egyet játszani?")
             .setCancelable(false)
             .setPositiveButton("Igen") { _, _ ->
                 reset()
             }.setNegativeButton("Nem") { _, _ ->
                 finishAffinity()
-            }.show()
+            }
     }
 
     fun reset() {
